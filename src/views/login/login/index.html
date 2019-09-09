@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>美业后台管理系统</title>
+  <!-- import CSS -->
+  <link rel="stylesheet" href="./src/element-ui/index.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 14px;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    body {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .left-content {
+      width: 65%;
+      height: 100vh;
+      background: url("./src/img/login-bg.jpg") no-repeat right center;
+      background-size: cover;
+      position: relative;
+      float: left;
+    }
+
+    .left-content-mask {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ec6875, #f7a16c);
+      opacity: .57;
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-radius: 1px;
+    }
+
+    .left-content-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .left-content-inner .main-content {
+      text-align: center;
+      color: #fff;
+      position: absolute;
+      top: 20vh;
+      left: 50%;
+      -webkit-transform: translate(-50%, 0);
+      transform: translate(-50%, 0);
+      width: 100%;
+    }
+
+    .left-content-inner .main-content h3 {
+      font-size: 24px;
+      font-weight: normal;
+      padding: 20px 0;
+      width: 50%;
+      margin: 0 auto;
+    }
+
+    .left-content-inner .main-content .desc {
+      font-size: 13px;
+      width: 50%;
+      margin: 0 auto 50px;
+      line-height: 22px;
+    }
+
+    .computer {
+      width: 627px;
+    }
+
+    .right-content {
+      float: left;
+      width: 35%;
+      position: relative;
+      text-align: center;
+    }
+
+    .logo {
+      width: 68px;
+      height: 68px;
+      border-radius: 5px;
+    }
+
+    .right-content .main-content {
+      width: 270px;
+      position: absolute;
+      top: 25vh;
+      left: 50%;
+      -webkit-transform: translate(-50%, 0);
+      transform: translate(-50%, 0);
+    }
+
+    .right-content .main-content h3 {
+      color: #909399;
+      font-size: 22px;
+      font-weight: normal;
+      padding: 20px 0 30px;
+    }
+
+    .right-content .el-tabs__nav-wrap {
+      width: 210px;
+      margin: 0 auto;
+    }
+
+    .right-content .el-tabs__nav-wrap::after {
+      content: "";
+      display: none;
+    }
+
+    .right-content .el-tabs__item {
+      font-size: 16px;
+      color: #606266;
+      height: 44px;
+      line-height: 44px;
+    }
+
+    .right-content .el-form-item__content {
+      margin-left: 0 !important;
+    }
+    .el-tabs__active-bar {
+      height: 3px;
+    }
+
+    .el-tabs__item.is-active {
+      color: #F1717E;
+    }
+
+    .login-btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .el-input {
+      position: relative;
+    }
+
+    .el-input input {
+      padding-left: 40px;
+    }
+
+    .user-icon {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      z-index: 2;
+    }
+
+    .password-icon {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      z-index: 2;
+    }
+
+    @media (max-width: 1024px){
+      .left-content {
+        display: none;
+      }
+      .right-content {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="app" class="login-page">
+  <div class="left-content">
+    <div class="left-content-mask"></div>
+    <div class="left-content-inner">
+      <div class="main-content">
+        <h3>中医理疗管理系统</h3>
+        <p class="desc">轻松管店，快乐营销轻松管店，快乐营销轻松快乐营销轻松快乐 <br>管店快乐营销轻松管店快乐</p>
+        <img class="computer" src="./src/img/computer.png" alt="">
+      </div>
+    </div>
+  </div>
+  <div class="right-content">
+    <div class="main-content">
+      <img class="logo" src="./src/img/logo.png" alt="">
+      <h3>中医理疗管理系统</h3>
+
+      <el-tabs v-model="form.type" @tab-click="handleClick">
+        <el-tab-pane label="单店登录" name="1"></el-tab-pane>
+        <el-tab-pane label="连锁总店登录" name="2"></el-tab-pane>
+      </el-tabs>
+      <el-form ref="form" :model="form" status-icon :rules="rules" :action="targetUrl" method="post" @submit.native = "onSubmit">
+        <el-form-item class="user-item" prop="username">
+          <img class="user-icon" src="./src/img/icon-user.png" alt="">
+          <el-input v-model.trim="form.username" name="username" placeholder="请输入账号" clearable></el-input>
+        </el-form-item>
+        <el-form-item class="password-item" prop="password">
+          <img class="user-icon" src="./src/img/icon-lock.png" alt="">
+          <el-input v-model.trim="form.password" name="password" type="password" placeholder="请输入密码" clearable></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button native-type="submit" type="primary" :loading="loginLoading" :disabled="loginLoading" class="login-btn">登录</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+  </div>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="./src/js/vue.js"></script>
+<!-- import JavaScript -->
+<script src="./src/js/index.js"></script>
+<script src="./src/js/axios.min.js"></script>
+<script>
+  var validMobile = (rule, value, callback) => {
+    var reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+    if (!value) {
+      callback(new Error('请输入账号'))
+    } else if (!reg.test(value)) {
+      callback(new Error('请输入正确手机号码'));
+    } else {
+      callback();
+    }
+  };
+  new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        form: {
+          type: '1',
+          username: '',
+          password: '',
+        },
+
+        rules: {
+          username: [
+            { required: true, trigger: 'blur', validator: validMobile },
+          ],
+          password: [
+            { required: true, message: '请输入密码', trigger: 'blur' },
+          ],
+        },
+        loginLoading : false,
+        targetUrl : './login'
+      }
+    },
+    mounted() {
+
+    },
+    methods: {
+      // 提交
+      onSubmit: function (e) {
+        console.log(0);
+        this.$refs['form'].validate((valid) => {
+          if (valid) return true;
+          e.preventDefault();
+        });
+      },
+      //切换
+      handleClick : function (tab) {
+        console.log(tab.name);
+      }
+    }
+  })
+</script>
+</html>
+
